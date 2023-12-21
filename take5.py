@@ -359,6 +359,7 @@ if __name__ == "__main__":
         ShortestRowPlayer('martijnbot 2'),
         DescendingPlayer('martijnbot 3'),
         SmallestGapPlayer('martijnbot 4'),
+        CheatingBastard('Isha'),
     ]
     take5 = Take5(players, quiet=True)
     stats = dict()
