@@ -272,6 +272,18 @@ class CostFunPlayer(MinimumRowPointPlayer):
         return best_card_so_far
 
 
+class CheatingBastard(Player):
+    """This strategy is very good at avoiding any penalty points """
+
+    def choose_card(self, board: Board) -> Card:
+        return Card(1)
+
+    def choose_row(self, board: Board) -> int:
+        """Oops"""
+        board.rows[0].clear()
+        return 0
+
+
 class Take5:
     NR_TURNS = 10
     NR_CARDS = 104
