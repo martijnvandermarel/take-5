@@ -1,6 +1,6 @@
 from abc import ABC
 from random import shuffle, choice, randrange
-import numpy as np
+from math import exp
 
 class CardTooLowException(Exception):
     pass
@@ -256,7 +256,7 @@ class CostFunPlayer(MinimumRowPointPlayer):
                 est_chance_of_taking = 0.0
             else:
                 space_chance = 1.0 - cards_before_limit / self.num_players
-                gap_chance = 1 - np.exp(-self.alpha * (gap - 1))
+                gap_chance = 1 - exp(-self.alpha * (gap - 1))
                 est_chance_of_taking = space_chance * gap_chance
             cost = pts * est_chance_of_taking
             return cost
