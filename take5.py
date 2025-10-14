@@ -77,7 +77,7 @@ class Board:
     def __repr__(self) -> str:
         return "\n".join([str(r) for r in self.rows])
     
-    def __iter__(self) -> Row:
+    def __iter__(self):
         for row in self.rows:
             yield row
 
@@ -91,6 +91,7 @@ class Board:
             -1 if card is lower than any rows -> player can choose which row to take
              p otherwise, p being the number of points for the player
         """
+        card = Card(card)
         # if any row is empty, card is played there
         for row in self.rows:
             if row.empty:
@@ -108,6 +109,10 @@ class Board:
         return self.rows[row_index].clear(new_card)
 
 class Player(ABC):
+    # TODO: Players can access and manipulate both the board,
+    # their hand and their points. Not very safe...
+    # This could be made into a PlayerPolicy class where these
+    # parameters are passed as copies
     def __init__(self, id) -> None:
         self.id = id
         self.points = 0
@@ -165,8 +170,12 @@ class Take5:
             self.print(self.board)
             played_cards = dict()
             for player in self.players:
-                played_cards[player] = player.choose_card(self.board)
-                card_players = {card : player for player, card in played_cards.items()}
+                card = player.choose_card(self.board)
+                if card not in player.hand:
+                    raise ValueError(f"Player {player.id} tried to play invalid card {card}")
+                player.hand.remove(card)
+                played_cards[player] = card
+            card_players = {card : player for player, card in played_cards.items()}
             played_cards = list(played_cards.values())
             played_cards.sort()
             for card in played_cards:

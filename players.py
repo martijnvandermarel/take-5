@@ -14,7 +14,6 @@ class ManualPlayer(Player):
                 card = Card(card_input)
             except:
                 continue
-        self.hand.remove(card)
         return card
     
     def choose_row(self, board : Board) -> int:
@@ -41,22 +40,19 @@ class MinimumRowPointPlayer(Player):
 class RandomPlayer(MinimumRowPointPlayer):
     def choose_card(self, board : Board) -> Card:
         """Pick a random card"""
-        card = self.hand.pop(randrange(len(self.hand)))
-        return card
+        return self.hand[randrange(len(self.hand))]
     
 class AscendingPlayer(MinimumRowPointPlayer):
     def choose_card(self, board : Board) -> Card:
         """Pick the lowest card available"""
-        self.hand.sort(reverse=True)
-        card = self.hand.pop()
-        return card
-    
+        self.hand.sort()
+        return self.hand[0]
+
 class DescendingPlayer(MinimumRowPointPlayer):
     def choose_card(self, board : Board) -> Card:
         """Pick the highest card available"""
         self.hand.sort()
-        card = self.hand.pop()
-        return card
+        return self.hand[-1]
     
 class SmallestGapPlayer(MinimumRowPointPlayer):
     def choose_card(self, board : Board) -> Card:
@@ -74,7 +70,6 @@ class SmallestGapPlayer(MinimumRowPointPlayer):
             if gap < smallest_gap_so_far:
                 best_card_so_far = card
                 smallest_gap_so_far = gap
-        self.hand.remove(best_card_so_far)
         return best_card_so_far
 
 class ShortestRowPlayer(MinimumRowPointPlayer):
@@ -98,7 +93,6 @@ class ShortestRowPlayer(MinimumRowPointPlayer):
                 best_card_so_far = card
                 shortest_length_so_far = length
                 best_card_gap_so_far = gap
-        self.hand.remove(best_card_so_far)
         return best_card_so_far
     
 class CostFunPlayer(MinimumRowPointPlayer):
@@ -143,5 +137,4 @@ class CostFunPlayer(MinimumRowPointPlayer):
             if value > best_value_so_far:
                 best_value_so_far = value
                 best_card_so_far = card
-        self.hand.remove(best_card_so_far)
         return best_card_so_far
